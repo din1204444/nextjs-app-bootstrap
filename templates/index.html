@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="space-y-6">
+    <h1 class="text-3xl font-bold text-red-600">Dashboard</h1>
+    
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-red-600">Total Books</h3>
+            <p class="text-4xl font-bold mt-2">{{ books_count }}</p>
+            <p class="text-gray-500 mt-2">Books in collection</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-red-600">Active Users</h3>
+            <p class="text-4xl font-bold mt-2">{{ users_count }}</p>
+            <p class="text-gray-500 mt-2">Registered members</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-red-600">Current Loans</h3>
+            <p class="text-4xl font-bold mt-2">{{ active_loans }}</p>
+            <p class="text-gray-500 mt-2">Books currently borrowed</p>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold text-red-600 mb-4">Recent Activities</h2>
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="p-6">
+                {% for transaction in recent_transactions %}
+                <div class="flex justify-between items-center {% if not loop.last %}border-b pb-4 mb-4{% endif %}">
+                    <div>
+                        <p class="font-semibold">
+                            {% if transaction.status == 'Borrowed' %}
+                                Book Borrowed
+                            {% elif transaction.status == 'Returned' %}
+                                Book Returned
+                            {% else %}
+                                Book Overdue
+                            {% endif %}
+                        </p>
+                        <p class="text-sm text-gray-500">{{ transaction.book.title }} - {{ transaction.user.name }}</p>
+                    </div>
+                    <span class="text-sm text-gray-500">
+                        {{ transaction.borrow_date.strftime('%Y-%m-%d') }}
+                    </span>
+                </div>
+                {% else %}
+                <p class="text-gray-500">No recent activities</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information -->
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold text-red-600 mb-4">System Information</h2>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-semibold">Penalty Rate</h3>
+                    <p class="text-gray-600">RM 5.00 per day</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold">Maximum Penalty</h3>
+                    <p class="text-gray-600">RM 50.00</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold">Loan Duration</h3>
+                    <p class="text-gray-600">14 days</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold">System Version</h3>
+                    <p class="text-gray-600">1.0.0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
